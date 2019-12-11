@@ -287,7 +287,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .avue-cropper-container {
   position: relative;
   overflow: hidden;
