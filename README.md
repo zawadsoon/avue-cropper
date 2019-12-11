@@ -4,6 +4,10 @@ Before you go. If you are not interested in VUE but want to check idea of this s
 
 There is a lot solution to solve this problem. This is just another one.
 
+### Quick tip
+
+This problem recently comes whit xhr/ajax. So if you want send cropped image to server just send Blob returned by the canvas.
+
 ## Example
 
 Short instruction how to run example:
