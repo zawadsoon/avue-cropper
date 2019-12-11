@@ -1,6 +1,6 @@
 {
   "name": "avue-cropper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Another Vue image cropper",
   "main": "dist/avue-cropper.js",
   "files": [
@@ -64,5 +64,8 @@
   },
   "peerDependencies": {
     "vue": "^2.6.10"
+  },
+  "dependencies": {
+    "css-loader": "^3.3.0"
   }
 }
