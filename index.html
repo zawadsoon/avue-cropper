@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Image cropping sample</title>
+    <style>
+      #preview {
+        width: 200px;
+        min-height: 200px;
+        height: auto;
+        border: solid green 1px;
+      }
+      #boundary {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        z-index: 2;
+        overflow: hidden;
+        border: solid black 1px;
+      }
+      #boundary img {
+        z-index: 1;
+        position: absolute;
+      }
+      #viewport {
+        width: 150px;
+        height: 150px;
+        z-index: 3;
+        border: solid red 2px;
+        position: absolute;
+        margin: auto;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h3>Select file</h3>
+      <input id="file-input" type="file" />
+      <h1>Crop box</h1>
+      <div id="boundary">
+        <div id="viewport" class="center"></div>
+        <img />
+      </div>
+    </div>
+    <h2>Preview</h2>
+    <img id="preview" />
+    <script>
+      /*
+       * Preparation
+       */
+      var boundaryElement = document.getElementById("boundary");
+      var viewportElement = document.getElementById("viewport");
+      var image = boundaryElement.getElementsByTagName("img")[0];
+      var preview = document.getElementById("preview");
+
+      var ctx = document.createElement("canvas").getContext("2d");
+
+      var dragging = false;
+      var scale = 1;
+      var positionDelta = { x: 0, y: 0 };
+
+      window.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("mouseup", onMouseUp);
+      boundaryElement.addEventListener("wheel", onWheel);
+      boundaryElement.addEventListener("mousedown", onMouseDown);
+
+      /*
+       * Handle image loading
+       */
+      image.onload = function(e) {
+        image.style.transformOrigin =
+          image.width / 2 + "px " + image.height / 2 + "px";
+
+        image.style.left =
+          (boundaryElement.clientWidth - image.width) / 2 + "px";
+        image.style.top =
+          (boundaryElement.clientHeight - image.height) / 2 + "px";
+
+        cropImage();
+      };
+
+      var fileInput = document.getElementById("file-input");
+
+      fileInput.addEventListener("change", function(event) {
+        var fileReader = new FileReader();
+
+        fileReader.onload = function(e) {
+          image.src = e.target.result;
+        };
+
+        fileReader.readAsDataURL(event.target.files[0]);
+      });
+
+      /*
+       * Moving image around in boundary
+       */
+      function transformImage() {
+        var x = positionDelta.x * scale;
+        var y = positionDelta.y * scale;
+
+        image.style.transform =
+          "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+      }
+
+      /*
+       * Actual image cropping
+       */
+      function cropImage() {
+        var sWidth = viewportElement.clientWidth / scale;
+        var sHeight = viewportElement.clientHeight / scale;
+        var sx = (image.width - sWidth) / 2 - positionDelta.x;
+        var sy = (image.height - sHeight) / 2 - positionDelta.y;
+        var dx = 0;
+        var dy = 0;
+        var dWidth = viewportElement.clientWidth;
+        var dHeight = viewportElement.clientHeight;
+
+        ctx.canvas.width = dWidth;
+        ctx.canvas.height = dHeight;
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+        ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+
+        preview.src = ctx.canvas.toDataURL();
+      }
+
+      /*
+       * Handling mouse events
+       */
+      function onMouseDown(event) {
+        event.preventDefault();
+
+        dragging = true;
+      }
+
+      function onMouseUp() {
+        dragging = false;
+
+        cropImage();
+      }
+
+      function onMouseMove(event) {
+        if (dragging === true) {
+          positionDelta.x += event.movementX / scale;
+          positionDelta.y += event.movementY / scale;
+
+          transformImage();
+        }
+      }
+
+      function onWheel(event) {
+        scale += Math.sign(event.deltaY) / 10;
+
+        transformImage();
+        cropImage();
+      }
+    </script>
+  </body>
+</html>
