@@ -16,7 +16,6 @@ Short instruction how to run example:
 - Go to main directory,
 - run `npm install`
 - run `npm run example:use`
-  Clone repository, go to main directory
 
 ## TODO
 
