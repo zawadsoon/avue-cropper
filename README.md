@@ -1,6 +1,6 @@
 # Another VUE image cropper
 
-Before you go. If you are not interested in VUE but want to check idea of this solution check [vanilla](https://github.com/zawadsoon/avue-cropper/tree/master) branch.
+Before you go. If you are not interested in VUE but want to check idea of this solution check [vanilla](https://github.com/zawadsoon/avue-cropper/tree/vanilla) branch.
 
 There is a lot solution to solve this problem. This is just another one.
 
