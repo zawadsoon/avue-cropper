@@ -38,7 +38,7 @@ export default {
     },
     touchZoomSesitivity: {
       type: Number,
-      default: 10
+      default: 2000
     }
   },
   data() {
@@ -127,6 +127,17 @@ export default {
       }
     },
 
+    /**
+     * Sets scale
+     *
+     * Prevents against exceeding limits
+     *
+     * @param {number} value
+     */
+    setScale(value) {
+      this.scale = value < this.minScale ? this.minScale : value;
+    },
+
     cropImage() {
       return new Promise(resolve => {
         if (this.image !== null && this.ctx !== null) {
@@ -179,9 +190,7 @@ export default {
         this.viewport.x > this.viewport.y ? this.viewport.x / width : this.viewport.y / height;
 
       this.calculateLimits();
-
       this.transformImage();
-
       this.emitInput();
     },
 
@@ -200,9 +209,7 @@ export default {
         this.scrollEndTimeoutId = null;
       }, 250);
 
-      let nextScale = this.scale + Math.sign(event.deltaY) / 10;
-
-      this.scale = nextScale < this.minScale ? this.minScale : nextScale;
+      this.setScale(this.scale + Math.sign(event.deltaY) / 10);
 
       this.validateBounding();
       this.transformImage();
@@ -252,6 +259,8 @@ export default {
     },
 
     onTouchMove(event) {
+      event.preventDefault();
+
       if (this.dragging) {
         if (event.touches.length == 1) {
           let touch = event.touches[0];
@@ -283,9 +292,7 @@ export default {
           if (this.prevPinchDistance != null) {
             let diff = d - this.prevPinchDistance;
 
-            let nextScale = this.scale + diff / 100;
-
-            this.scale = nextScale < this.minScale ? this.minScale : nextScale;
+            this.setScale(this.scale + diff / this.touchZoomSesitivity);
 
             this.validateBounding();
             this.transformImage();
