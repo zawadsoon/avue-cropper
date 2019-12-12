@@ -248,6 +248,8 @@ export default {
     dragEnd() {
       this.dragging = false;
       this.prevTouch = null;
+      this.prevPinchDistance = null;
+      console.log('drag end');
 
       this.emitInput();
     },
@@ -259,8 +261,6 @@ export default {
     },
 
     onTouchMove(event) {
-      event.preventDefault();
-
       if (this.dragging) {
         if (event.touches.length == 1) {
           let touch = event.touches[0];
