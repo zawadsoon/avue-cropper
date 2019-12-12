@@ -22,7 +22,7 @@ Short instruction how to run example:
 - [ ] Live example,
 - [ ] Github pages,
 - [ ] Fix issue with min zoom when messing with boundary and viewport,
-- [ ] Add full touch support,
+- [x] Add full touch support,
 - [ ] Rewrite to TS (actually convert plugin to TS)
 
 # Help
