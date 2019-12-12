@@ -1,6 +1,6 @@
 {
   "name": "avue-cropper",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Another Vue image cropper",
   "main": "dist/avue-cropper.js",
   "files": [
