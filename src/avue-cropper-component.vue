@@ -35,6 +35,10 @@ export default {
     boundary: {
       type: Object,
       default: () => ({ x: 300, y: 300 })
+    },
+    touchZoomSesitivity: {
+      type: Number,
+      default: 10
     }
   },
   data() {
@@ -53,7 +57,8 @@ export default {
       delta: { x: 0, y: 0 },
       scrollEndTimeoutId: null,
       minScale: 1,
-      prevTouch: null
+      prevTouch: null,
+      prevPinchDistance: null
     };
   },
   computed: {
@@ -195,14 +200,11 @@ export default {
         this.scrollEndTimeoutId = null;
       }, 250);
 
-      if (this.image !== null) {
-        let nextScale = this.scale + Math.sign(event.deltaY) / 10;
+      let nextScale = this.scale + Math.sign(event.deltaY) / 10;
 
-        this.scale = nextScale < this.minScale ? this.minScale : nextScale;
-      }
+      this.scale = nextScale < this.minScale ? this.minScale : nextScale;
 
       this.validateBounding();
-
       this.transformImage();
     },
 
@@ -266,9 +268,34 @@ export default {
             this.delta.y -= movementY / this.scale;
 
             this.validateBounding();
-
             this.transformImage();
           }
+        }
+
+        if (event.touches.length == 2) {
+          let ax = event.touches[0].screenX;
+          let ay = event.touches[0].screenY;
+          let bx = event.touches[1].screenX;
+          let by = event.touches[1].screenY;
+
+          let d = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));
+
+          if (this.prevPinchDistance != null) {
+            let diff = d - this.prevPinchDistance;
+
+            let nextScale = this.scale + diff / 100;
+
+            this.scale = nextScale < this.minScale ? this.minScale : nextScale;
+
+            this.validateBounding();
+            this.transformImage();
+          }
+
+          this.prevPinchDistance = d;
+        }
+
+        if (event.touches.length != 2) {
+          this.prevPinchDistance = null;
         }
       }
     },
@@ -279,7 +306,6 @@ export default {
         this.delta.y += event.movementY / this.scale;
 
         this.validateBounding();
-
         this.transformImage();
       }
     }
