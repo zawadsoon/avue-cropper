@@ -27,8 +27,6 @@ This problem recently comes with xhr/ajax. So if you want send cropped image to 
 
 If you are not interested in VUE but want to check idea of this solution check [vanilla](https://github.com/zawadsoon/avue-cropper/tree/vanilla) branch.
 
-There is a lot solution to solve this problem. This is just another one.
-
 ## Example
 
 Short instruction how to run example:
