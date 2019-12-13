@@ -8,6 +8,10 @@ There is a lot solution to solve this problem. This is just another one.
 
 This problem recently comes whit xhr/ajax. So if you want send cropped image to server just send Blob returned by the canvas.
 
+## Live preview
+
+Can be found here: [Live Preview](https://zawadsoon.github.io/avue-cropper/)
+
 ## Example
 
 Short instruction how to run example:
@@ -19,7 +23,7 @@ Short instruction how to run example:
 
 ## TODO
 
-- [ ] Live example,
+- [x] Live example,
 - [ ] Github pages,
 - [ ] Fix issue with min zoom when messing with boundary and viewport,
 - [x] Add full touch support,
